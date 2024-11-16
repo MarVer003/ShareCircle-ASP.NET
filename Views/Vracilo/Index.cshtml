@@ -1,0 +1,59 @@
+@model IEnumerable<ShareCircle.Models.Vracilo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StevilkaVracila)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZnesekVracila)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DatumVracila)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dolžnik)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Skupina)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StevilkaVracila)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZnesekVracila)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatumVracila)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dolžnik.Ime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Skupina.ImeSkupine)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

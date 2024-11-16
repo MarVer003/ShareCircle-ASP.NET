@@ -1,0 +1,48 @@
+@model ShareCircle.Models.Vracilo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Vracilo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ID_dolznika" class="control-label"></label>
+                <select asp-for="ID_dolznika" class ="form-control" asp-items="ViewBag.ID_dolznika"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ID_skupine" class="control-label"></label>
+                <select asp-for="ID_skupine" class ="form-control" asp-items="ViewBag.ID_skupine"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StevilkaVracila" class="control-label"></label>
+                <input asp-for="StevilkaVracila" class="form-control" />
+                <span asp-validation-for="StevilkaVracila" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ZnesekVracila" class="control-label"></label>
+                <input asp-for="ZnesekVracila" class="form-control" />
+                <span asp-validation-for="ZnesekVracila" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatumVracila" class="control-label"></label>
+                <input asp-for="DatumVracila" class="form-control" />
+                <span asp-validation-for="DatumVracila" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
