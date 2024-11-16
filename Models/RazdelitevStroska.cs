@@ -1,24 +1,25 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShareCircle.Models;
 
 public class RazdelitevStroska
 {
-    [Key, Column(Order = 0)]
+    [Key]
+    public int ID { get; set; }
+
+    [ForeignKey(nameof(Strosek))]
     public int ID_stroska { get; set; }
 
-    [Key, Column(Order = 1)]
+    [ForeignKey(nameof(Dolznik))]
     public int ID_dolznika { get; set; }
 
     [Required]
     public float Znesek { get; set; }
 
     // Navigacijske lastnosti
-    [ForeignKey("IDStroška")]
-    public Strosek Strosek { get; set; }
-    [ForeignKey("IDDolžnika")]
-    public Uporabnik Dolžnik { get; set; }
+    public required Strosek Strosek { get; init; }
+    public required Uporabnik Dolznik { get; init; }
 
 }

@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ShareCircle.Models;
@@ -22,8 +21,10 @@ public class Uporabnik
     public DateTime DatumPrijave { get; set; }
 
      // Navigacijske lastnosti
-    public ICollection<ClanSkupine> ClanSkupine { get; set; }
-    public ICollection<Strosek> Stroski { get; set; }
-    public ICollection<RazdelitevStroska> RazdelitveStroskov { get; set; }
-    public ICollection<Vracilo> Vracila { get; set; }
+    public ICollection<ClanSkupine>? ClanSkupine { get; set; }
+    public ICollection<Strosek>? Stroski { get; set; }
+    public ICollection<Vracilo>? Vracila { get; set; }
+    
+    [DeleteBehavior(DeleteBehavior.Restrict)]
+    public ICollection<RazdelitevStroska>? RazdelitveStroskov { get; set; }
 }

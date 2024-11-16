@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,13 +5,15 @@ namespace ShareCircle.Models;
 
 public class Strosek
 {
-    [Key, Column(Order = 0)]
+    [Key]
+    public int ID { get; set; }
+
+    [ForeignKey(nameof(Placnik))]
     public int ID_placnika { get; set; }
 
-    [Key, Column(Order = 1)]
+    [ForeignKey(nameof(Skupina))]
     public int ID_skupine { get; set; }
 
-    [Key, Column(Order = 2)]
     public int StevilkaStroska { get; set; }
 
     [Required]
@@ -22,9 +23,7 @@ public class Strosek
     public DateTime DatumPlacila { get; set; }
 
    // Navigacijske lastnosti
-    [ForeignKey("IDPlačnika")]
-    public Uporabnik Uporabnik { get; set; }
-    [ForeignKey("IDSkupine")]
-    public Skupina Skupina { get; set; }
-    public ICollection<RazdelitevStroska> RazdelitveStroskov { get; set; }
+    public required Uporabnik Placnik { get; init; }
+    public required Skupina Skupina { get; init; }
+    public ICollection<RazdelitevStroska>? RazdelitveStroskov { get; set; }
 }
