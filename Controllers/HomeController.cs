@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ShareCircle.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShareCircle.Controllers;
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShareCircle.Data;
 
@@ -11,9 +12,11 @@ using ShareCircle.Data;
 namespace ShareCircle.Migrations
 {
     [DbContext(typeof(ShareCircleDbContext))]
-    partial class ShareCircleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241203091815_AppUser")]
+    partial class AppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
