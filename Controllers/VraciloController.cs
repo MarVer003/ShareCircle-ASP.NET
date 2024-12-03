@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareCircle.Data;
 using ShareCircle.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShareCircle.Controllers
 {
