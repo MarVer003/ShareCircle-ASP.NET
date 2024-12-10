@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShareCircle.Models;
 namespace ShareCircle.Data;
 using ShareCircle.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -25,5 +26,7 @@ public DbSet<Strosek> Strosek { get; set; } = default!;
 public DbSet<Vracilo> Vracilo { get; set; } = default!;
 
 public DbSet<Uporabnik>? Uporabnik { get; set; } = default!;
+
+public DbSet<ShareCircle.Models.ClanSkupine> ClanSkupine { get; set; } = default!;
 
 }

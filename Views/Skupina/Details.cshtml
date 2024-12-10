@@ -1,30 +1,103 @@
 @model ShareCircle.Models.Skupina
 
 @{
-    ViewData["Title"] = "Details";
+    ViewBag.Title = Model.ImeSkupine;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar for navigation -->
+        <div class="col-md-3 bg-light sidebar" style="padding: 20px; height: 100vh;">
+            <h2>@Model.ImeSkupine</h2>
+            <p><small>@Model.DatumNastanka.ToString("dd.MM.yyyy")</small></p>
+            <hr />
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Expenses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Balances</a>
+                </li>
+            </ul>
+        </div>
 
-<div>
-    <h4>Skupina</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImeSkupine)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImeSkupine)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatumNastanka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatumNastanka)
-        </dd>
-    </dl>
+        <!-- Main Content Area -->
+        <div class="col-md-6 main-content" style="padding: 20px;">
+            <h3>Stroški</h3>
+            <hr />
+            @if (Model.Stroski != null && Model.Stroski.Any())
+            {
+                @foreach (var strosek in Model.Stroski)
+                {
+                    <div class="expense-entry mb-3 p-3 border rounded">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>@strosek.Naslov</strong>
+                                <br />
+                                <small class="text-muted">@strosek.DatumPlacila.ToString("dd.MM.yyyy")</small>
+                            </div>
+                            @* <div class="@((expense.AmountOwed > 0) ? "text-danger" : "text-success")">
+                                @(expense.AmountOwed > 0 ? "You owe " : "You are owed ") @expense.Amount.ToString("C")
+                            </div> *@
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Ni zabeleženih stroškov za to skupino.</p>
+            }
+        </div>
+
+        <!-- Right Sidebar for balances summary -->
+        <div class="col-md-3 bg-light" style="padding: 20px; height: 100vh;">
+            <h4>Bilance</h4>
+            <hr />
+            @if (Model.ClanSkupine != null && Model.ClanSkupine.Any())
+            {
+                @foreach (var clan in Model.ClanSkupine)
+                {
+                    <div class="balance-entry mb-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                @clan.Uporabnik.Ime @clan.Uporabnik.Priimek
+                            </div>
+                            @* <div class="@((clan.Balance < 0) ? "text-danger" : "text-success")">
+                                @(clan.Balance < 0 ? "You owe " : "You are owed ") @Math.Abs(clan.Balance).ToString("C")
+                            </div> *@
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Ni bilanc za prikaz.</p>
+            }
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    /* Basic styling for layout */
+    .sidebar {
+        background-color: #f8f9fa;
+    }
+
+    .main-content {
+        background-color: #ffffff;
+    }
+
+    .expense-entry {
+        background-color: #f1f1f1;
+    }
+
+    .balance-entry {
+        background-color: #e9ecef;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>

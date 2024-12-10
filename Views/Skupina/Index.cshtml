@@ -1,41 +1,57 @@
 @model IEnumerable<ShareCircle.Models.Skupina>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Skupine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5">Moje Skupine</h1>
+        <a asp-action="Create" class="btn btn-primary">Dodaj novo skupino</a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ImeSkupine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DatumNastanka)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImeSkupine)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DatumNastanka)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var group in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@group.ImeSkupine</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Ustvarjeno: @group.DatumNastanka.ToString("dd.MM.yyyy")
+                            </h6>
+                            <p class="card-text">
+                                <small class="text-muted">ID: @group.ID</small>
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Details" asp-route-id="@group.ID" class="btn btn-info btn-sm">Podrobnosti</a>
+                                <a asp-action="Edit" asp-route-id="@group.ID" class="btn btn-warning btn-sm">Uredi</a>
+                                <a asp-action="Delete" asp-route-id="@group.ID" class="btn btn-danger btn-sm">Izbriši</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Trenutno nimate nobene skupine. Kliknite zgoraj, da ustvarite novo.</p>
+    }
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>

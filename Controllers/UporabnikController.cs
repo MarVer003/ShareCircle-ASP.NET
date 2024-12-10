@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareCircle.Data;
 using ShareCircle.Models;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace ShareCircle.Controllers
 {
+    [Authorize]
     public class UporabnikController : Controller
     {
         private readonly ShareCircleDbContext _context;

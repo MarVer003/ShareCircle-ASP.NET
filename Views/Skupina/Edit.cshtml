@@ -1,36 +1,67 @@
 @model ShareCircle.Models.Skupina
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Uredi Skupino";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Uredi Skupino</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-<h4>Skupina</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <label asp-for="ImeSkupine" class="control-label"></label>
-                <input asp-for="ImeSkupine" class="form-control" />
-                <span asp-validation-for="ImeSkupine" class="text-danger"></span>
+                        <input type="hidden" asp-for="ID" />
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ImeSkupine" class="form-label">Ime Skupine</label>
+                            <input asp-for="ImeSkupine" class="form-control" placeholder="Vnesite novo ime skupine" />
+                            <span asp-validation-for="ImeSkupine" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-success">Shrani spremembe</button>
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Nazaj na seznam</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DatumNastanka" class="control-label"></label>
-                <input asp-for="DatumNastanka" class="form-control" />
-                <span asp-validation-for="DatumNastanka" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
 
+    .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>
