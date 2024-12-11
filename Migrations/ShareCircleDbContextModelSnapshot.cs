@@ -102,10 +102,12 @@ namespace ShareCircle.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -142,10 +144,12 @@ namespace ShareCircle.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -240,17 +244,17 @@ namespace ShareCircle.Migrations
                     b.Property<DateTime>("DatumPridruzitve")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ID_skupine")
+                    b.Property<int>("SkupinaID")
                         .HasColumnType("int");
 
-                    b.Property<int>("ID_uporabnika")
+                    b.Property<int>("UporabnikID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ID_skupine");
+                    b.HasIndex("SkupinaID");
 
-                    b.HasIndex("ID_uporabnika");
+                    b.HasIndex("UporabnikID");
 
                     b.ToTable("ClanSkupine");
                 });
@@ -293,9 +297,7 @@ namespace ShareCircle.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImeSkupine")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -346,14 +348,10 @@ namespace ShareCircle.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ime")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Priimek")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -447,13 +445,13 @@ namespace ShareCircle.Migrations
                 {
                     b.HasOne("ShareCircle.Models.Skupina", "Skupina")
                         .WithMany("ClanSkupine")
-                        .HasForeignKey("ID_skupine")
+                        .HasForeignKey("SkupinaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ShareCircle.Models.Uporabnik", "Uporabnik")
                         .WithMany("ClanSkupine")
-                        .HasForeignKey("ID_uporabnika")
+                        .HasForeignKey("UporabnikID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

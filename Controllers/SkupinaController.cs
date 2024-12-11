@@ -2,15 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareCircle.Data;
 using ShareCircle.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ShareCircle.Controllers
 {
+    [Authorize]
     public class SkupinaController : Controller
     {
         private readonly ShareCircleDbContext _context;
@@ -35,6 +36,9 @@ namespace ShareCircle.Controllers
             }
 
             var skupina = await _context.Skupina
+                .Include(s => s.ClanSkupine)
+                .ThenInclude(cs => cs.Uporabnik)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (skupina == null)
             {
@@ -59,6 +63,7 @@ namespace ShareCircle.Controllers
         {
             if (ModelState.IsValid)
             {
+                skupina.DatumNastanka = DateTime.Now;
                 _context.Add(skupina);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +92,7 @@ namespace ShareCircle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,ImeSkupine,DatumNastanka")] Skupina skupina)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,ImeSkupine")] Skupina skupina)
         {
             if (id != skupina.ID)
             {
@@ -98,7 +103,16 @@ namespace ShareCircle.Controllers
             {
                 try
                 {
-                    _context.Update(skupina);
+
+                    var obstojecaSkupina = await _context.Skupina.FindAsync(id);
+                    if (obstojecaSkupina == null)
+                    {
+                        return NotFound();
+                    }
+
+                    obstojecaSkupina.ImeSkupine = skupina.ImeSkupine;
+
+                    _context.Update(obstojecaSkupina);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

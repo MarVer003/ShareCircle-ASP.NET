@@ -1,8 +1,35 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Domov";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <div class="jumbotron bg-light py-5 shadow rounded">
+        <h1 class="display-4">Dobrodošli v ShareCircle!</h1>
+        <p class="lead">Organizirajte skupinske stroške in vračila.</p>
+        <hr class="my-4">
+        <p>Za začetek si oglejte svoje <a asp-controller="Skupina" asp-action="Index" class="text-primary">skupine</a>.
+        </p>
+        <p class="text-muted">Delo na domači strani je še v teku!</p>
+        <a asp-controller="Skupina" asp-action="Index" class="btn btn-primary btn-lg mt-3">
+            Oglejte si Skupine
+        </a>
+    </div>
 </div>
+
+<style>
+    .jumbotron {
+        background: #f8f9fa;
+        border-radius: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+</style>

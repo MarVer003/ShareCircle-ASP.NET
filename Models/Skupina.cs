@@ -5,14 +5,10 @@ namespace ShareCircle.Models;
 
 public class Skupina
 {
-    [Key]
     public int ID { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public required string ImeSkupine { get; set; }
+    public string? ImeSkupine { get; set; }
 
-    [Required]
     public DateTime DatumNastanka { get; set; }
 
     // Navigacijske lastnosti

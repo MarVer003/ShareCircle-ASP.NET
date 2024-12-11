@@ -5,25 +5,25 @@ namespace ShareCircle.Models;
 
 public class Strosek
 {
-    [Key]
+    //[Key]
     public int ID { get; set; }
 
-    [ForeignKey(nameof(Placnik))]
+    //[ForeignKey(nameof(Placnik))]
     public int ID_placnika { get; set; }
 
-    [ForeignKey(nameof(Skupina))]
+    //[ForeignKey(nameof(Skupina))]
     public int ID_skupine { get; set; }
 
     public int StevilkaStroska { get; set; }
 
-    [Required]
+    public string? Naslov { get; set; }
+
     public float CelotniZnesek { get; set; }
 
-    [Required]
     public DateTime DatumPlacila { get; set; }
 
    // Navigacijske lastnosti
-    public required Uporabnik Placnik { get; init; }
-    public required Skupina Skupina { get; init; }
+    public Uporabnik? Placnik { get; init; }
+    public Skupina? Skupina { get; init; }
     public ICollection<RazdelitevStroska>? RazdelitveStroskov { get; set; }
 }
