@@ -81,6 +81,7 @@ namespace ShareCircle.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [DataType(DataType.Text)]
             [Display(Name = "Username")]
             public string UserName { get; set; }
 
