@@ -38,8 +38,8 @@ namespace ShareCircle.Data
 //dodajanje skupin
             var skupine = new Skupina[]
             {
-                new Skupina{ImeSkupine="Skupina1",DatumNastanka=DateTime.Parse("20010-01-01")},
-                new Skupina{ImeSkupine="Skupina2",DatumNastanka=DateTime.Parse("20010-01-02")}
+                new Skupina{ImeSkupine="Skupina1",DatumNastanka=DateTime.Parse("2010-01-01")},
+                new Skupina{ImeSkupine="Skupina2",DatumNastanka=DateTime.Parse("2010-01-02")}
             };
             foreach (Skupina sk in skupine)
             {
@@ -68,9 +68,9 @@ namespace ShareCircle.Data
 //dodajanje stroskov
             var stroseki = new Strosek[]
             {
-            new Strosek{ID_placnika=Uporabniki[0].ID,ID_skupine=skupine[0].ID,StevilkaStroska=1,CelotniZnesek=4,Naslov="pivo",DatumPlacila=DateTime.Parse("20023-09-01")},
+            new Strosek{ID_placnika=Uporabniki[0].ID,ID_skupine=skupine[0].ID,StevilkaStroska=1,CelotniZnesek=4,Naslov="pivo",DatumPlacila=DateTime.Parse("2023-09-01")},
             new Strosek{ID_placnika=Uporabniki[1].ID,ID_skupine=skupine[0].ID,StevilkaStroska=2,CelotniZnesek=8,Naslov="vino",DatumPlacila=DateTime.Parse("2023-01-08")},
-            new Strosek{ID_placnika=Uporabniki[4].ID,ID_skupine=skupine[1].ID,StevilkaStroska=1,CelotniZnesek=16,Naslov="hotel",DatumPlacila=DateTime.Parse("20023-06-04")}
+            new Strosek{ID_placnika=Uporabniki[4].ID,ID_skupine=skupine[1].ID,StevilkaStroska=1,CelotniZnesek=16,Naslov="hotel",DatumPlacila=DateTime.Parse("2023-06-04")}
             };
 
             foreach (Strosek c in stroseki)
@@ -102,9 +102,9 @@ namespace ShareCircle.Data
 //dodajanje vracil
             var vracila = new Vracilo[]
             {
-                new Vracilo{ID_dolznika=Uporabniki[1].ID,ID_skupine=skupine[0].ID,StevilkaVracila=1,ZnesekVracila=1,DatumVracila=DateTime.Parse("20024-09-01"),Dolžnik=Uporabniki[1],Skupina=skupine[0]},
-                new Vracilo{ID_dolznika=Uporabniki[2].ID,ID_skupine=skupine[0].ID,StevilkaVracila=2,ZnesekVracila=1,DatumVracila=DateTime.Parse("20024-09-02"),Dolžnik=Uporabniki[2],Skupina=skupine[0]},
-                new Vracilo{ID_dolznika=Uporabniki[2].ID,ID_skupine=skupine[0].ID,StevilkaVracila=3,ZnesekVracila=2,DatumVracila=DateTime.Parse("20024-09-03"),Dolžnik=Uporabniki[2],Skupina=skupine[0]}
+                new Vracilo{ID_dolznika=Uporabniki[1].ID,ID_skupine=skupine[0].ID,StevilkaVracila=1,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-01"),Dolžnik=Uporabniki[1],Skupina=skupine[0]},
+                new Vracilo{ID_dolznika=Uporabniki[2].ID,ID_skupine=skupine[0].ID,StevilkaVracila=2,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-02"),Dolžnik=Uporabniki[2],Skupina=skupine[0]},
+                new Vracilo{ID_dolznika=Uporabniki[2].ID,ID_skupine=skupine[0].ID,StevilkaVracila=3,ZnesekVracila=2,DatumVracila=DateTime.Parse("2024-09-03"),Dolžnik=Uporabniki[2],Skupina=skupine[0]}
             };
             foreach (Vracilo vr in vracila)
             {
