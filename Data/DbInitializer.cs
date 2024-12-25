@@ -68,9 +68,9 @@ namespace ShareCircle.Data
 //dodajanje stroskov
             var stroseki = new Strosek[]
             {
-            new Strosek{ID_placnika=Uporabniki[0].ID,ID_skupine=skupine[0].ID,StevilkaStroska=1,CelotniZnesek=4,DatumPlacila=DateTime.Parse("2023-09-01")},
-            new Strosek{ID_placnika=Uporabniki[1].ID,ID_skupine=skupine[0].ID,StevilkaStroska=2,CelotniZnesek=8,DatumPlacila=DateTime.Parse("2023-01-08")},
-            new Strosek{ID_placnika=Uporabniki[4].ID,ID_skupine=skupine[1].ID,StevilkaStroska=1,CelotniZnesek=16,DatumPlacila=DateTime.Parse("2023-06-04")}
+            new Strosek{ID_placnika=Uporabniki[0].ID,ID_skupine=skupine[0].ID,Naslov="pivo",StevilkaStroska=1,CelotniZnesek=4,DatumPlacila=DateTime.Parse("2023-09-01"),Placnik=Uporabniki[0],Skupina=skupine[0]},
+            new Strosek{ID_placnika=Uporabniki[1].ID,ID_skupine=skupine[0].ID,Naslov="vino",StevilkaStroska=2,CelotniZnesek=8,DatumPlacila=DateTime.Parse("2023-01-08"),Placnik=Uporabniki[1],Skupina=skupine[0]},
+            new Strosek{ID_placnika=Uporabniki[4].ID,ID_skupine=skupine[1].ID,Naslov="hotel",StevilkaStroska=1,CelotniZnesek=16,DatumPlacila=DateTime.Parse("2023-06-04"),Placnik=Uporabniki[4],Skupina=skupine[1]}
             };
 
             foreach (Strosek c in stroseki)
