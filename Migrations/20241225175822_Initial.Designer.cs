@@ -12,7 +12,7 @@ using ShareCircle.Data;
 namespace ShareCircle.Migrations
 {
     [DbContext(typeof(ShareCircleDbContext))]
-    [Migration("20241204141255_Initial")]
+    [Migration("20241225175822_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -285,7 +285,7 @@ namespace ShareCircle.Migrations
 
                     b.HasIndex("ID_stroska");
 
-                    b.ToTable("RazdelitevStroska");
+                    b.ToTable("RazdelitevStroskas");
                 });
 
             modelBuilder.Entity("ShareCircle.Models.Skupina", b =>
@@ -327,14 +327,23 @@ namespace ShareCircle.Migrations
                     b.Property<int>("ID_skupine")
                         .HasColumnType("int");
 
+                    b.Property<string>("Naslov")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlacnikID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SkupinaID")
+                        .HasColumnType("int");
+
                     b.Property<int>("StevilkaStroska")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ID_placnika");
+                    b.HasIndex("PlacnikID");
 
-                    b.HasIndex("ID_skupine");
+                    b.HasIndex("SkupinaID");
 
                     b.ToTable("Strosek");
                 });
@@ -486,15 +495,11 @@ namespace ShareCircle.Migrations
                 {
                     b.HasOne("ShareCircle.Models.Uporabnik", "Placnik")
                         .WithMany("Stroski")
-                        .HasForeignKey("ID_placnika")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PlacnikID");
 
                     b.HasOne("ShareCircle.Models.Skupina", "Skupina")
                         .WithMany("Stroski")
-                        .HasForeignKey("ID_skupine")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SkupinaID");
 
                     b.Navigation("Placnik");
 
