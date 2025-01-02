@@ -10,13 +10,13 @@ namespace ShareCircle.Data
         public static void Initialize(ShareCircleDbContext context)
         {
             context.Database.EnsureCreated();
-                    // Look for any students.
-        if (context.Uporabnik.Any())
-        {
-            return;   // DB has been seeded
-        }
+            // Look for any students.
+            if (context.Uporabnik.Any())
+            {
+                return;   // DB has been seeded
+            }
 
-//dodajanje uporabnikov
+            //dodajanje uporabnikov
 
             var Uporabniki = new Uporabnik[]
             {
@@ -35,7 +35,7 @@ namespace ShareCircle.Data
             }
             context.SaveChanges();
 
-//dodajanje skupin
+            //dodajanje skupin
             var skupine = new Skupina[]
             {
                 new Skupina{ImeSkupine="Skupina1",DatumNastanka=DateTime.Parse("2010-01-01")},
@@ -47,7 +47,7 @@ namespace ShareCircle.Data
             }
             context.SaveChanges();
 
-//dodajanje clanov skupin
+            //dodajanje clanov skupin
             var claniSkupin = new ClanSkupine[]
             {
                 new ClanSkupine{UporabnikID=Uporabniki[0].ID,SkupinaID=skupine[0].ID,DatumPridruzitve=DateTime.Parse("2011-01-01")},
@@ -65,7 +65,7 @@ namespace ShareCircle.Data
             }
             context.SaveChanges();
 
-//dodajanje stroskov
+            //dodajanje stroskov
             var stroseki = new Strosek[]
             {
             new Strosek{ID_placnika=Uporabniki[0].ID,ID_skupine=skupine[0].ID,Naslov="pivo",StevilkaStroska=1,CelotniZnesek=4,DatumPlacila=DateTime.Parse("2023-09-01"),Placnik=Uporabniki[0],Skupina=skupine[0]},
@@ -79,27 +79,27 @@ namespace ShareCircle.Data
             }
             context.SaveChanges();
 
-//dodajanje razdelitve stroska
+            //dodajanje razdelitve stroska
             var razdelitveStroskov = new RazdelitevStroska[]
             {
-            new RazdelitevStroska{ID_stroska=stroseki[0].ID,ID_dolznika=Uporabniki[1].ID,Znesek=1,Strosek=stroseki[0],Dolznik=Uporabniki[1]},
-            new RazdelitevStroska{ID_stroska=stroseki[0].ID,ID_dolznika=Uporabniki[2].ID,Znesek=1,Strosek=stroseki[0],Dolznik=Uporabniki[2]},
-            new RazdelitevStroska{ID_stroska=stroseki[0].ID,ID_dolznika=Uporabniki[3].ID,Znesek=1,Strosek=stroseki[0],Dolznik=Uporabniki[3]},
-            new RazdelitevStroska{ID_stroska=stroseki[1].ID,ID_dolznika=Uporabniki[0].ID,Znesek=2,Strosek=stroseki[1],Dolznik=Uporabniki[0]},
-            new RazdelitevStroska{ID_stroska=stroseki[1].ID,ID_dolznika=Uporabniki[2].ID,Znesek=2,Strosek=stroseki[1],Dolznik=Uporabniki[2]},
-            new RazdelitevStroska{ID_stroska=stroseki[1].ID,ID_dolznika=Uporabniki[3].ID,Znesek=2,Strosek=stroseki[1],Dolznik=Uporabniki[3]},
-            new RazdelitevStroska{ID_stroska=stroseki[2].ID,ID_dolznika=Uporabniki[5].ID,Znesek=4,Strosek=stroseki[2],Dolznik=Uporabniki[5]},
-            new RazdelitevStroska{ID_stroska=stroseki[2].ID,ID_dolznika=Uporabniki[6].ID,Znesek=4,Strosek=stroseki[2],Dolznik=Uporabniki[6]},
-            new RazdelitevStroska{ID_stroska=stroseki[2].ID,ID_dolznika=Uporabniki[7].ID,Znesek=4,Strosek=stroseki[2],Dolznik=Uporabniki[7]},
+            new RazdelitevStroska{ID_stroska=stroseki[0].ID,ID_dolznika=Uporabniki[1].ID,Znesek=1.33f,Strosek=stroseki[0],Dolznik=Uporabniki[1]},
+            new RazdelitevStroska{ID_stroska=stroseki[0].ID,ID_dolznika=Uporabniki[2].ID,Znesek=1.33f,Strosek=stroseki[0],Dolznik=Uporabniki[2]},
+            new RazdelitevStroska{ID_stroska=stroseki[0].ID,ID_dolznika=Uporabniki[3].ID,Znesek=1.34f,Strosek=stroseki[0],Dolznik=Uporabniki[3]},
+            new RazdelitevStroska{ID_stroska=stroseki[1].ID,ID_dolznika=Uporabniki[0].ID,Znesek=2.67f,Strosek=stroseki[1],Dolznik=Uporabniki[0]},
+            new RazdelitevStroska{ID_stroska=stroseki[1].ID,ID_dolznika=Uporabniki[2].ID,Znesek=2.67f,Strosek=stroseki[1],Dolznik=Uporabniki[2]},
+            new RazdelitevStroska{ID_stroska=stroseki[1].ID,ID_dolznika=Uporabniki[3].ID,Znesek=2.66f,Strosek=stroseki[1],Dolznik=Uporabniki[3]},
+            new RazdelitevStroska{ID_stroska=stroseki[2].ID,ID_dolznika=Uporabniki[5].ID,Znesek=5.33f,Strosek=stroseki[2],Dolznik=Uporabniki[5]},
+            new RazdelitevStroska{ID_stroska=stroseki[2].ID,ID_dolznika=Uporabniki[6].ID,Znesek=5.33f,Strosek=stroseki[2],Dolznik=Uporabniki[6]},
+            new RazdelitevStroska{ID_stroska=stroseki[2].ID,ID_dolznika=Uporabniki[7].ID,Znesek=5.34f,Strosek=stroseki[2],Dolznik=Uporabniki[7]},
 
             };
             foreach (RazdelitevStroska rs in razdelitveStroskov)
             {
-                context.RazdelitevStroskas.Add(rs);
+                context.RazdelitevStroska.Add(rs);
             }
             context.SaveChanges();
 
-//dodajanje vracil
+            //dodajanje vracil
             var vracila = new Vracilo[]
             {
                 new Vracilo{ID_dolznika=Uporabniki[1].ID,ID_skupine=skupine[0].ID,StevilkaVracila=1,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-01"),Dolžnik=Uporabniki[1],Skupina=skupine[0]},
