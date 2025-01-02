@@ -33,18 +33,20 @@
             {
                 @foreach (var strosek in Model.Stroski)
                 {
-                    <div class="expense-entry mb-3 p-3 border rounded">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <strong>@strosek.Naslov</strong>
-                                <br />
-                                <small class="text-muted">@strosek.DatumPlacila.ToString("dd.MM.yyyy")</small>
+                    <a asp-action="Podrobnosti" asp-route-id="@Model.ID" asp-route-strosekId="@strosek.ID" class="text-decoration-none">
+                        <div class="expense-entry mb-3 p-3 border rounded bg-light" style="cursor: pointer;">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>@strosek.Naslov</strong>
+                                    <br />
+                                    <small class="text-muted">@strosek.DatumPlacila.ToString("d. M. yyyy")</small>
+                                </div>
+                                <div class="text-danger">
+                                    @strosek.CelotniZnesek.ToString("C")
+                                </div>
                             </div>
-                            @* <div class="@((expense.AmountOwed > 0) ? "text-danger" : "text-success")">
-                                @(expense.AmountOwed > 0 ? "You owe " : "You are owed ") @expense.Amount.ToString("C")
-                            </div> *@
                         </div>
-                    </div>
+                    </a>
                 }
             }
             else
@@ -99,5 +101,10 @@
         background-color: #e9ecef;
         padding: 10px;
         border-radius: 5px;
+    }
+
+    .expense-entry:hover {
+        background-color: #f8f9fa;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 </style>

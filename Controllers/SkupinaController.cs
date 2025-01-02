@@ -27,6 +27,24 @@ namespace ShareCircle.Controllers
             return View(await _context.Skupina.ToListAsync());
         }
 
+        // GET: Skupina/Details/5/Podrobnosti
+        public async Task<IActionResult> Podrobnosti(int id, int strosekId)
+        {
+            var strosek = await _context.Strosek
+                .Include(s => s.RazdelitveStroskov)
+                .ThenInclude(rs => rs.Dolznik)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.ID == strosekId);
+
+            if (strosek == null)
+            {
+                return NotFound();
+            }
+
+            return View(strosek);
+        }
+
+
         // GET: Skupina/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -36,6 +54,7 @@ namespace ShareCircle.Controllers
             }
 
             var skupina = await _context.Skupina
+                .Include(s => s.Stroski)
                 .Include(s => s.ClanSkupine)
                 .ThenInclude(cs => cs.Uporabnik)
                 .AsNoTracking()
