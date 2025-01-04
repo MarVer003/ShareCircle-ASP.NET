@@ -9,10 +9,11 @@
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <h3 class="mb-0">@Model.Naslov</h3>
-            <small class="text-light">Datum plačila: @Model.DatumPlacila.ToString("d. M. yyyy")</small>
+            <small class="text-light">Datum plačila: @Model.DatumPlacila.ToString("d.MM.yyyy")</small>
         </div>
         <div class="card-body">
             <h4>Celotni znesek: <span class="text-danger">@Model.CelotniZnesek.ToString("C")</span></h4>
+            <h5>Plačal: <span class="text-danger">@Model.Placnik.Ime @Model.Placnik.Priimek</span></h5>
             <hr />
             <h5>Razdelitev stroška</h5>
             <table class="table">

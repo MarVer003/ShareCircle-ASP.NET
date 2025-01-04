@@ -1,0 +1,84 @@
+@model ShareCircle.Models.Vracilo
+
+@{
+    ViewBag.Title = "Dodaj Vračilo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Dodaj Vračilo</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="DodajVracilo" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Kdo plačuje -->
+                        <div class="form-group mb-3">
+                            <label asp-for="ID_dolznika" class="form-label">Kdo plačuje?</label>
+                            <select asp-for="ID_dolznika" class="form-control" asp-items="ViewBag.Uporabniki"></select>
+                        </div>
+
+                        <!-- Kdo prejema -->
+                        <div class="form-group mb-3">
+                            <label asp-for="ID_upnika" class="form-label">Kdo prejema vračilo?</label>
+                            <select asp-for="ID_upnika" class="form-control" asp-items="ViewBag.Uporabniki"></select>
+                        </div>
+
+                        <!-- Znesek vračila -->
+                        <div class="form-group mb-3">
+                            <label asp-for="ZnesekVracila" class="form-label">Znesek Vračila</label>
+                            <input asp-for="ZnesekVracila" type="number" class="form-control"
+                                placeholder="Vpišite znesek vračila" required step="0.01" />
+                            <span asp-validation-for="ZnesekVracila" class="text-danger"></span>
+                        </div>
+
+                        <!-- Hidden ID of Skupina -->
+                        <input type="hidden" name="ID_skupine" value="@Model.ID_skupine" />
+
+                        <!-- Submit and Back Button -->
+                        <div class="form-group text-center">
+                            <input type="submit" value="Dodaj" class="btn btn-success" />
+                            <a asp-action="Details" asp-route-id="@Model.ID_skupine"
+                                class="btn btn-secondary ms-2">Nazaj na seznam</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

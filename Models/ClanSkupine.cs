@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ShareCircle.Models;
 
 public class ClanSkupine
-{   
+{
     public int ID { get; set; }
 
     //[ForeignKey(nameof(Uporabnik))]
@@ -14,6 +14,8 @@ public class ClanSkupine
     public int SkupinaID { get; set; }
 
     public DateTime DatumPridruzitve { get; set; }
+
+    public decimal Stanje { get; set; } = 0;
 
     // Navigacijske lastnosti
     public Uporabnik? Uporabnik { get; set; }

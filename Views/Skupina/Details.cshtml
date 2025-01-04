@@ -1,4 +1,4 @@
-@model ShareCircle.Models.Skupina
+@* @model ShareCircle.Models.Skupina
 
 @{
     ViewBag.Title = Model.ImeSkupine;
@@ -70,7 +70,169 @@
                             </div>
                             @* <div class="@((clan.Balance < 0) ? "text-danger" : "text-success")">
                                 @(clan.Balance < 0 ? "You owe " : "You are owed ") @Math.Abs(clan.Balance).ToString("C")
-                            </div> *@
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Ni bilanc za prikaz.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Basic styling for layout */
+    .sidebar {
+        background-color: #f8f9fa;
+    }
+
+    .main-content {
+        background-color: #ffffff;
+    }
+
+    .expense-entry {
+        background-color: #f1f1f1;
+    }
+
+    .balance-entry {
+        background-color: #e9ecef;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .expense-entry:hover {
+        background-color: #f8f9fa;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+ *@
+@model ShareCircle.Models.Skupina
+
+@{
+    ViewBag.Title = Model.ImeSkupine;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar for navigation -->
+        <div class="col-md-3 bg-light sidebar sticky-top" style="padding: 20px; height: 100vh;">
+            <h2>@Model.ImeSkupine</h2>
+            <p><small>@Model.DatumNastanka.ToString("dd.MM.yyyy")</small></p>
+            <hr />
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Expenses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Balances</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-md-6 main-content" style="padding: 20px;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Transakcije</h3>
+                <div>
+                    <a asp-action="DodajStrosek" asp-route-skupinaId="@Model.ID" class="btn btn-primary me-2">Dodaj
+                        Strošek</a>
+
+                    <a asp-action="DodajVracilo" asp-route-skupinaId="@Model.ID" class="btn btn-secondary">Dodaj
+                        Vračilo</a>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <ul class="nav nav-tabs" id="expenseTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="expenses-tab" data-bs-toggle="tab" data-bs-target="#expenses"
+                        type="button" role="tab" aria-controls="expenses" aria-selected="true">
+                        Stroški
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="backPayments-tab" data-bs-toggle="tab" data-bs-target="#backPayments"
+                        type="button" role="tab" aria-controls="backPayments" aria-selected="false">
+                        Vračila
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tabs Content -->
+            <div class="tab-content mt-4" id="expenseTabContent">
+                <!-- Expenses Tab -->
+                <div class="tab-pane fade show active" id="expenses" role="tabpanel" aria-labelledby="expenses-tab">
+                    @if (Model.Stroski != null && Model.Stroski.Any())
+                    {
+                        @foreach (var strosek in Model.Stroski)
+                        {
+                            <a asp-action="PodrobnostiStroska" asp-route-id="@Model.ID" asp-route-strosekId="@strosek.ID"
+                                class="text-decoration-none">
+                                <div class="expense-entry mb-3 p-3 border rounded bg-light" style="cursor: pointer;">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <strong>@strosek.Naslov</strong>
+                                            <br />
+                                            <small class="text-muted">@strosek.DatumPlacila.ToString("d. M. yyyy")</small>
+                                        </div>
+                                        <div class="text-danger">
+                                            @strosek.CelotniZnesek.ToString("C")
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+
+                <!-- Back Payments Tab -->
+                <div class="tab-pane fade" id="backPayments" role="tabpanel" aria-labelledby="backPayments-tab">
+                    @if (Model.Vracila != null && Model.Vracila.Any())
+                    {
+                        @foreach (var vracilo in Model.Vracila)
+                        {
+                            <div class="expense-entry mb-3 p-3 border rounded bg-light">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>@vracilo.Dolžnik.Ime @vracilo.Dolžnik.Priimek → @vracilo.Upnik.Ime
+                                            @vracilo.Upnik.Priimek</strong>
+                                        <br />
+                                        <small class="text-muted">@vracilo.DatumVracila.ToString("d. M. yyyy")</small>
+                                    </div>
+                                    <div class="text-success">
+                                        @vracilo.ZnesekVracila.ToString("C")
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar for balances summary -->
+        <div class="col-md-3 bg-light sticky-top" style="padding: 20px; height: 100vh;">
+            <h4>Stanje</h4>
+            <hr />
+            @if (Model.ClanSkupine != null && Model.ClanSkupine.Any())
+            {
+                @foreach (var clan in Model.ClanSkupine)
+                {
+                    <div class="balance-entry mb-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                @clan.Uporabnik.Ime @clan.Uporabnik.Priimek
+                            </div>
+                            <div class="@((clan.Stanje < 0) ? "text-danger" : "text-success")">
+                                @clan.Stanje.ToString("C")
+                            </div>
                         </div>
                     </div>
                 }
