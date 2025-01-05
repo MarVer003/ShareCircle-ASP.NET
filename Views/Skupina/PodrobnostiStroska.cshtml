@@ -43,9 +43,16 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer">
+        <div class="card-footer d-flex justify-content-between">
             <a asp-action="Details" asp-route-id="@Model.ID_skupine" class="btn btn-secondary">Nazaj na podrobnosti
                 skupine</a>
+
+            <form asp-action="DeleteStrosek" asp-route-id="@Model.ID" asp-route-skupinaId="@Model.ID_skupine"
+                method="post" onsubmit="return confirm('Ali ste prepričani, da želite izbrisati ta strošek?');"
+                class="mb-0">
+                <button type="submit" class="btn btn-danger">Izbriši Strošek</button>
+            </form>
         </div>
+
     </div>
 </div>

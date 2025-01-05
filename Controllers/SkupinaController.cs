@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -45,6 +41,22 @@ namespace ShareCircle.Controllers
             return View(strosek);
         }
 
+        // GET: Skupina/Details/PodrobnostiVracila/{id_skupine}?vraciloId={id_vracila}
+        public async Task<IActionResult> PodrobnostiVracila(int id, int vraciloId)
+        {
+            var vracilo = await _context.Vracilo
+                .Include(v => v.Dolžnik)
+                .Include(v => v.Upnik)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.ID == vraciloId);
+
+            if (vracilo == null)
+            {
+                return NotFound();
+            }
+
+            return View(vracilo);
+        }
 
         // Action to display the form for adding an expense
         [HttpGet]
@@ -82,10 +94,6 @@ namespace ShareCircle.Controllers
                 strosek.DatumPlacila = DateTime.Now;
                 _context.Strosek.Add(strosek);
 
-                var placnik = _context.ClanSkupine
-                .Where(cs => cs.UporabnikID == strosek.ID_placnika)
-                .ToList();
-
                 var dolzniki = _context.ClanSkupine
                 .Include(cs => cs.Uporabnik)
                 .Where(cs => cs.SkupinaID == strosek.ID_skupine && cs.UporabnikID != strosek.ID_placnika)
@@ -96,9 +104,6 @@ namespace ShareCircle.Controllers
                     cs
                 })
                 .ToList();
-
-                placnik[0].Stanje += strosek.CelotniZnesek;
-                _context.ClanSkupine.Update(placnik[0]);
 
                 decimal znesek = strosek.CelotniZnesek;
                 decimal dolgovanZnesek = Math.Floor(znesek / dolzniki.Count * 100) / 100;
@@ -113,12 +118,11 @@ namespace ShareCircle.Controllers
 
                 for (int i = 0; i < dolzniki.Count; i++)
                 {
-                    dolzniki[i].cs.Stanje -= dolgovaniZneski[i];
-                    _context.ClanSkupine.Update(dolzniki[i].cs);
                     _context.RazdelitevStroska.Add(new() { ID_stroska = strosek.ID, ID_dolznika = dolzniki[i].UporabnikID, Znesek = dolgovaniZneski[i], Strosek = strosek, Dolznik = dolzniki[i].Uporabnik });
                 }
 
                 await _context.SaveChangesAsync();
+                await RecalculateBalancesAsync(strosek.ID_skupine);
 
                 return RedirectToAction("Details", new { id = strosek.ID_skupine });
             }
@@ -169,13 +173,8 @@ namespace ShareCircle.Controllers
                 var upnik = _context.ClanSkupine
                     .First(cs => cs.UporabnikID == vracilo.ID_upnika);
 
-                dolznik.Stanje += vracilo.ZnesekVracila;
-                _context.ClanSkupine.Update(dolznik);
-
-                upnik.Stanje -= vracilo.ZnesekVracila;
-                _context.ClanSkupine.Update(upnik);
-
                 await _context.SaveChangesAsync();
+                await RecalculateBalancesAsync(vracilo.ID_skupine);
 
 
                 return RedirectToAction("Details", new { id = vracilo.ID_skupine });
@@ -183,6 +182,112 @@ namespace ShareCircle.Controllers
 
             return View(vracilo); // Return view with validation errors
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteStrosek(int id, int skupinaId)
+        {
+            try
+            {
+                // Retrieve the expense to delete
+                var strosek = await _context.Strosek
+                    .Include(s => s.RazdelitveStroskov)
+                    .FirstOrDefaultAsync(s => s.ID == id);
+
+                if (strosek == null)
+                {
+                    return NotFound();
+                }
+
+                // Tudi razdelitve je potrebno izbrisati
+                if (strosek.RazdelitveStroskov != null)
+                {
+                    _context.RazdelitevStroska.RemoveRange(strosek.RazdelitveStroskov);
+                }
+
+                // Izbriši strošek
+                _context.Strosek.Remove(strosek);
+                _context.SaveChanges();
+                await RecalculateBalancesAsync(strosek.ID_skupine);
+
+                // Vrni se nazaj na glavno stran skupine
+                return RedirectToAction("Details", new { id = skupinaId });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home"); // Adjust the error handling as needed
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteVracilo(int id, int skupinaId)
+        {
+            try
+            {
+                // Retrieve the expense to delete
+                var vracilo = await _context.Vracilo
+                    .FirstOrDefaultAsync(s => s.ID == id);
+
+                if (vracilo == null)
+                {
+                    return NotFound();
+                }
+
+                // Izbriši strošek
+                _context.Vracilo.Remove(vracilo);
+                _context.SaveChanges();
+                await RecalculateBalancesAsync(vracilo.ID_skupine);
+
+                // Vrni se nazaj na glavno stran skupine
+                return RedirectToAction("Details", new { id = skupinaId });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home"); // Adjust the error handling as needed
+            }
+        }
+
+        private async Task RecalculateBalancesAsync(int SkupinaId)
+        {
+            var claniSkupine = await _context.ClanSkupine
+                .Where(cs => cs.SkupinaID == SkupinaId)
+                .ToArrayAsync();
+
+            var stroskiInRazdelitve = await _context.Strosek
+                .Include(s => s.RazdelitveStroskov)
+                .Where(cs => cs.ID_skupine == SkupinaId)
+                .ToArrayAsync();
+
+            var vracila = await _context.Vracilo
+                .Where(s => s.ID_skupine == SkupinaId)
+                .ToArrayAsync();
+
+            Dictionary<int, decimal> claniZneski = [];
+            foreach (var clan in claniSkupine)
+            {
+                claniZneski.Add(clan.UporabnikID, 0);
+            }
+            foreach (var strosek in stroskiInRazdelitve)
+            {
+                claniZneski[strosek.ID_placnika] += strosek.CelotniZnesek;
+                foreach (var razdelitev in strosek.RazdelitveStroskov)
+                {
+                    claniZneski[razdelitev.ID_dolznika] -= razdelitev.Znesek;
+                }
+            }
+            foreach (var vracilo in vracila)
+            {
+                claniZneski[vracilo.ID_dolznika] += vracilo.ZnesekVracila;
+                claniZneski[vracilo.ID_upnika] -= vracilo.ZnesekVracila;
+            }
+
+            foreach (var clan in claniSkupine)
+            {
+                clan.Stanje = claniZneski[clan.UporabnikID];
+                _context.Update(clan);
+            }
+            await _context.SaveChangesAsync();
+        }
+
 
 
 
