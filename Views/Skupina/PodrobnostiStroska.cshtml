@@ -1,0 +1,58 @@
+@model ShareCircle.Models.Strosek
+
+@{
+    ViewData["Title"] = "Podrobnosti Stroška";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">@Model.Naslov</h3>
+            <small class="text-light">Datum plačila: @Model.DatumPlacila.ToString("d.MM.yyyy")</small>
+        </div>
+        <div class="card-body">
+            <h4>Celotni znesek: <span class="text-danger">@Model.CelotniZnesek.ToString("C")</span></h4>
+            <h5>Plačal: <span class="text-danger">@Model.Placnik.Ime @Model.Placnik.Priimek</span></h5>
+            <hr />
+            <h5>Razdelitev stroška</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Dolžnik</th>
+                        <th>Znesek</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RazdelitveStroskov != null && Model.RazdelitveStroskov.Any())
+                    {
+                        @foreach (var razdelitev in Model.RazdelitveStroskov)
+                        {
+                            <tr>
+                                <td>@razdelitev.Dolznik.Ime @razdelitev.Dolznik.Priimek</td>
+                                <td>@razdelitev.Znesek.ToString("C")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">Ni razpoložljivih podatkov o razdelitvi.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <a asp-action="Details" asp-route-id="@Model.ID_skupine" class="btn btn-secondary">Nazaj na podrobnosti
+                skupine</a>
+
+            <form asp-action="DeleteStrosek" asp-route-id="@Model.ID" asp-route-skupinaId="@Model.ID_skupine"
+                method="post" onsubmit="return confirm('Ali ste prepričani, da želite izbrisati ta strošek?');"
+                class="mb-0">
+                <button type="submit" class="btn btn-danger">Izbriši Strošek</button>
+            </form>
+        </div>
+
+    </div>
+</div>

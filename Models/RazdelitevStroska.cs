@@ -15,8 +15,9 @@ public class RazdelitevStroska
     [ForeignKey(nameof(Dolznik))]
     public int ID_dolznika { get; set; }
 
+
     [Required]
-    public float Znesek { get; set; }
+    public decimal Znesek { get; set; }
 
     // Navigacijske lastnosti
     public required Strosek Strosek { get; init; }

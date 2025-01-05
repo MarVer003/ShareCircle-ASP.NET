@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShareCircle.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -196,7 +196,8 @@ namespace ShareCircle.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UporabnikID = table.Column<int>(type: "int", nullable: false),
                     SkupinaID = table.Column<int>(type: "int", nullable: false),
-                    DatumPridruzitve = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DatumPridruzitve = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Stanje = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,24 +226,24 @@ namespace ShareCircle.Migrations
                     ID_skupine = table.Column<int>(type: "int", nullable: false),
                     StevilkaStroska = table.Column<int>(type: "int", nullable: false),
                     Naslov = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CelotniZnesek = table.Column<float>(type: "real", nullable: false),
-                    DatumPlacila = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PlacnikID = table.Column<int>(type: "int", nullable: true),
-                    SkupinaID = table.Column<int>(type: "int", nullable: true)
+                    CelotniZnesek = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DatumPlacila = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Strosek", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Strosek_Skupina_SkupinaID",
-                        column: x => x.SkupinaID,
+                        name: "FK_Strosek_Skupina_ID_skupine",
+                        column: x => x.ID_skupine,
                         principalTable: "Skupina",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Strosek_Uporabnik_PlacnikID",
-                        column: x => x.PlacnikID,
+                        name: "FK_Strosek_Uporabnik_ID_placnika",
+                        column: x => x.ID_placnika,
                         principalTable: "Uporabnik",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,10 +253,12 @@ namespace ShareCircle.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ID_dolznika = table.Column<int>(type: "int", nullable: false),
+                    ID_upnika = table.Column<int>(type: "int", nullable: false),
                     ID_skupine = table.Column<int>(type: "int", nullable: false),
                     StevilkaVracila = table.Column<int>(type: "int", nullable: false),
-                    ZnesekVracila = table.Column<float>(type: "real", nullable: false),
-                    DatumVracila = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ZnesekVracila = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DatumVracila = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UporabnikID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -271,30 +274,41 @@ namespace ShareCircle.Migrations
                         column: x => x.ID_dolznika,
                         principalTable: "Uporabnik",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vracilo_Uporabnik_ID_upnika",
+                        column: x => x.ID_upnika,
+                        principalTable: "Uporabnik",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vracilo_Uporabnik_UporabnikID",
+                        column: x => x.UporabnikID,
+                        principalTable: "Uporabnik",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "RazdelitevStroskas",
+                name: "RazdelitevStroska",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ID_stroska = table.Column<int>(type: "int", nullable: false),
                     ID_dolznika = table.Column<int>(type: "int", nullable: false),
-                    Znesek = table.Column<float>(type: "real", nullable: false)
+                    Znesek = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RazdelitevStroskas", x => x.ID);
+                    table.PrimaryKey("PK_RazdelitevStroska", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_RazdelitevStroskas_Strosek_ID_stroska",
+                        name: "FK_RazdelitevStroska_Strosek_ID_stroska",
                         column: x => x.ID_stroska,
                         principalTable: "Strosek",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RazdelitevStroskas_Uporabnik_ID_dolznika",
+                        name: "FK_RazdelitevStroska_Uporabnik_ID_dolznika",
                         column: x => x.ID_dolznika,
                         principalTable: "Uporabnik",
                         principalColumn: "ID",
@@ -351,24 +365,24 @@ namespace ShareCircle.Migrations
                 column: "UporabnikID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RazdelitevStroskas_ID_dolznika",
-                table: "RazdelitevStroskas",
+                name: "IX_RazdelitevStroska_ID_dolznika",
+                table: "RazdelitevStroska",
                 column: "ID_dolznika");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RazdelitevStroskas_ID_stroska",
-                table: "RazdelitevStroskas",
+                name: "IX_RazdelitevStroska_ID_stroska",
+                table: "RazdelitevStroska",
                 column: "ID_stroska");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Strosek_PlacnikID",
+                name: "IX_Strosek_ID_placnika",
                 table: "Strosek",
-                column: "PlacnikID");
+                column: "ID_placnika");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Strosek_SkupinaID",
+                name: "IX_Strosek_ID_skupine",
                 table: "Strosek",
-                column: "SkupinaID");
+                column: "ID_skupine");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vracilo_ID_dolznika",
@@ -379,6 +393,16 @@ namespace ShareCircle.Migrations
                 name: "IX_Vracilo_ID_skupine",
                 table: "Vracilo",
                 column: "ID_skupine");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vracilo_ID_upnika",
+                table: "Vracilo",
+                column: "ID_upnika");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vracilo_UporabnikID",
+                table: "Vracilo",
+                column: "UporabnikID");
         }
 
         /// <inheritdoc />
@@ -403,7 +427,7 @@ namespace ShareCircle.Migrations
                 name: "ClanSkupine");
 
             migrationBuilder.DropTable(
-                name: "RazdelitevStroskas");
+                name: "RazdelitevStroska");
 
             migrationBuilder.DropTable(
                 name: "Vracilo");

@@ -8,17 +8,17 @@ public class Strosek
     //[Key]
     public int ID { get; set; }
 
-    //[ForeignKey(nameof(Placnik))]
+    [ForeignKey(nameof(Placnik))]
     public int ID_placnika { get; set; }
 
-    //[ForeignKey(nameof(Skupina))]
+    [ForeignKey(nameof(Skupina))]
     public int ID_skupine { get; set; }
 
     public int StevilkaStroska { get; set; }
 
     public string? Naslov { get; set; }
 
-    public float CelotniZnesek { get; set; }
+    public decimal CelotniZnesek { get; set; }
 
     public DateTime DatumPlacila { get; set; }
 

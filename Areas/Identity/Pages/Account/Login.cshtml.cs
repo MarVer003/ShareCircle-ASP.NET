@@ -65,9 +65,6 @@ namespace ShareCircle.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
@@ -108,6 +105,7 @@ namespace ShareCircle.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            _logger.LogInformation("Method called");
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -138,6 +136,8 @@ namespace ShareCircle.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
+
+            _logger.LogInformation("LogIn ModelState is NOT valid!");
 
             // If we got this far, something failed, redisplay form
             return Page();

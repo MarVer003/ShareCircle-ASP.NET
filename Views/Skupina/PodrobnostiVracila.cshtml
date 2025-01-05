@@ -1,0 +1,29 @@
+@model ShareCircle.Models.Vracilo
+
+@{
+    ViewData["Title"] = "Podrobnosti Vračila";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Podrobnosti Vračila</h3>
+                <small class="text-light">Datum vračila: @Model.DatumVracila.ToString("d.MM.yyyy")</small>
+            </div>
+            <div class="card-body">
+                <h4>Znesek vračila: <span class="text-success">@Model.ZnesekVracila.ToString("C")</span></h4>
+                <h5>Dolžnik: <span class="text-danger">@Model.Dolžnik?.Ime @Model.Dolžnik?.Priimek</span></h5>
+                <h5>Upnik: <span class="text-success">@Model.Upnik?.Ime @Model.Upnik?.Priimek</span></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a asp-action="Details" asp-route-id="@Model.ID_skupine" class="btn btn-secondary">Nazaj na podrobnosti skupine</a>
+
+                <form asp-action="DeleteVracilo" asp-route-id="@Model.ID" asp-route-skupinaId="@Model.ID_skupine" method="post" onsubmit="return confirm('Ali ste prepričani, da želite izbrisati to vračilo?');" class="mb-0">
+                    <button type="submit" class="btn btn-danger">Izbriši Vračilo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
