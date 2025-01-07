@@ -1,0 +1,31 @@
+@model ShareCircle.Models.ClanSkupine
+
+@{
+    ViewData["Title"] = "Dodaj Uporabnika";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Dodaj Uporabnika v Skupino</h1>
+
+    <form asp-action="DodajUporabnika" method="post">
+
+        <input type="hidden" asp-for="SkupinaID" value="@Model.SkupinaID" />
+
+        <div class="mb-3">
+            <label for="ID_uporabnika" class="form-label">Izberite Uporabnika</label>
+            <select asp-for="UporabnikID" class="form-select" asp-items="ViewBag.Uporabniki" required></select>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Dodaj</button>
+            <a asp-action="Details" asp-route-id="@Model.SkupinaID" class="btn btn-secondary">Prekliči</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+    }
+</style>

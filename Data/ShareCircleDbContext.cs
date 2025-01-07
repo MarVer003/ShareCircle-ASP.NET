@@ -38,12 +38,12 @@ public class ShareCircleDbContext : IdentityDbContext<ApplicationUser>
                 .HasForeignKey(v => v.ID_skupine)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-/*
-        modelBuilder.Entity<Vracilo>()
-            .ToTable(tv => tv.HasTrigger("trg_PosodobiStanjaVracilo"));
+        /*
+                modelBuilder.Entity<Vracilo>()
+                    .ToTable(tv => tv.HasTrigger("trg_PosodobiStanjaVracilo"));
 
-        modelBuilder.Entity<Strosek>()
-            .ToTable(ts => ts.HasTrigger("trg_PosodobiStanjaStrosek"));*/
+                modelBuilder.Entity<Strosek>()
+                    .ToTable(ts => ts.HasTrigger("trg_PosodobiStanjaStrosek"));*/
     }
 
     internal static void Initialize(ShareCircleDbContext context)
@@ -71,7 +71,7 @@ public class ShareCircleDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Vracilo> Vracilo { get; set; } = default!;
 
-    public DbSet<Uporabnik> Uporabnik { get; set; } = default!;
+    public DbSet<ApplicationUser> Uporabnik { get; set; } = default!;
 
     public DbSet<ClanSkupine> ClanSkupine { get; set; } = default!;
 

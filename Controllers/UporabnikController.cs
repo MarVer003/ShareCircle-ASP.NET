@@ -29,7 +29,7 @@ namespace ShareCircle.Controllers
         }
 
         // GET: Uporabnik/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
             {
@@ -37,7 +37,7 @@ namespace ShareCircle.Controllers
             }
 
             var uporabnik = await _context.Uporabnik
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (uporabnik == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace ShareCircle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Ime,Priimek,DatumPrijave")] Uporabnik uporabnik)
+        public async Task<IActionResult> Create([Bind("Id,Ime,Priimek,DatumPrijave")] ApplicationUser uporabnik)
         {
             if (ModelState.IsValid)
             {
@@ -89,9 +89,9 @@ namespace ShareCircle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Ime,Priimek,DatumPrijave")] Uporabnik uporabnik)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Ime,Priimek,DatumPrijave")] ApplicationUser uporabnik)
         {
-            if (id != uporabnik.ID)
+            if (id != uporabnik.Id)
             {
                 return NotFound();
             }
@@ -105,7 +105,7 @@ namespace ShareCircle.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UporabnikExists(uporabnik.ID))
+                    if (!UporabnikExists(uporabnik.Id))
                     {
                         return NotFound();
                     }
@@ -120,7 +120,7 @@ namespace ShareCircle.Controllers
         }
 
         // GET: Uporabnik/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
             {
@@ -128,7 +128,7 @@ namespace ShareCircle.Controllers
             }
 
             var uporabnik = await _context.Uporabnik
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (uporabnik == null)
             {
                 return NotFound();
@@ -152,9 +152,9 @@ namespace ShareCircle.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UporabnikExists(int id)
+        private bool UporabnikExists(string id)
         {
-            return _context.Uporabnik.Any(e => e.ID == id);
+            return _context.Uporabnik.Any(e => e.Id == id);
         }
     }
 }

@@ -7,10 +7,10 @@ public class ClanSkupine
 {
     public int ID { get; set; }
 
-    //[ForeignKey(nameof(Uporabnik))]
-    public int UporabnikID { get; set; }
+    [ForeignKey(nameof(Uporabnik))]
+    public string UporabnikID { get; set; }
 
-    //[ForeignKey(nameof(Skupina))]
+    [ForeignKey(nameof(Skupina))]
     public int SkupinaID { get; set; }
 
     public DateTime DatumPridruzitve { get; set; }
@@ -18,6 +18,6 @@ public class ClanSkupine
     public decimal Stanje { get; set; } = 0;
 
     // Navigacijske lastnosti
-    public Uporabnik? Uporabnik { get; set; }
+    public ApplicationUser? Uporabnik { get; set; }
     public Skupina? Skupina { get; set; }
 }

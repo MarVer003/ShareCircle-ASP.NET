@@ -30,9 +30,9 @@ namespace ShareCircle.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priimek = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DatumPrijave = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -51,35 +51,6 @@ namespace ShareCircle.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Skupina",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImeSkupine = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DatumNastanka = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Skupina", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Uporabnik",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Priimek = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DatumPrijave = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Uporabnik", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,12 +160,32 @@ namespace ShareCircle.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Skupina",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImeSkupine = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DatumNastanka = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Skupina", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Skupina_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClanSkupine",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UporabnikID = table.Column<int>(type: "int", nullable: false),
+                    UporabnikID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SkupinaID = table.Column<int>(type: "int", nullable: false),
                     DatumPridruzitve = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Stanje = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -203,15 +194,15 @@ namespace ShareCircle.Migrations
                 {
                     table.PrimaryKey("PK_ClanSkupine", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_ClanSkupine_AspNetUsers_UporabnikID",
+                        column: x => x.UporabnikID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_ClanSkupine_Skupina_SkupinaID",
                         column: x => x.SkupinaID,
                         principalTable: "Skupina",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClanSkupine_Uporabnik_UporabnikID",
-                        column: x => x.UporabnikID,
-                        principalTable: "Uporabnik",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -222,7 +213,7 @@ namespace ShareCircle.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ID_placnika = table.Column<int>(type: "int", nullable: false),
+                    ID_placnika = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ID_skupine = table.Column<int>(type: "int", nullable: false),
                     StevilkaStroska = table.Column<int>(type: "int", nullable: false),
                     Naslov = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -233,15 +224,15 @@ namespace ShareCircle.Migrations
                 {
                     table.PrimaryKey("PK_Strosek", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_Strosek_AspNetUsers_ID_placnika",
+                        column: x => x.ID_placnika,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Strosek_Skupina_ID_skupine",
                         column: x => x.ID_skupine,
                         principalTable: "Skupina",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Strosek_Uporabnik_ID_placnika",
-                        column: x => x.ID_placnika,
-                        principalTable: "Uporabnik",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -252,40 +243,40 @@ namespace ShareCircle.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ID_dolznika = table.Column<int>(type: "int", nullable: false),
-                    ID_upnika = table.Column<int>(type: "int", nullable: false),
+                    ID_dolznika = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ID_upnika = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ID_skupine = table.Column<int>(type: "int", nullable: false),
                     StevilkaVracila = table.Column<int>(type: "int", nullable: false),
                     ZnesekVracila = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DatumVracila = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UporabnikID = table.Column<int>(type: "int", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vracilo", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Vracilo_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Vracilo_AspNetUsers_ID_dolznika",
+                        column: x => x.ID_dolznika,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vracilo_AspNetUsers_ID_upnika",
+                        column: x => x.ID_upnika,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Vracilo_Skupina_ID_skupine",
                         column: x => x.ID_skupine,
                         principalTable: "Skupina",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Vracilo_Uporabnik_ID_dolznika",
-                        column: x => x.ID_dolznika,
-                        principalTable: "Uporabnik",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Vracilo_Uporabnik_ID_upnika",
-                        column: x => x.ID_upnika,
-                        principalTable: "Uporabnik",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Vracilo_Uporabnik_UporabnikID",
-                        column: x => x.UporabnikID,
-                        principalTable: "Uporabnik",
-                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -295,24 +286,24 @@ namespace ShareCircle.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ID_stroska = table.Column<int>(type: "int", nullable: false),
-                    ID_dolznika = table.Column<int>(type: "int", nullable: false),
+                    ID_dolznika = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Znesek = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RazdelitevStroska", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_RazdelitevStroska_AspNetUsers_ID_dolznika",
+                        column: x => x.ID_dolznika,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_RazdelitevStroska_Strosek_ID_stroska",
                         column: x => x.ID_stroska,
                         principalTable: "Strosek",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RazdelitevStroska_Uporabnik_ID_dolznika",
-                        column: x => x.ID_dolznika,
-                        principalTable: "Uporabnik",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -375,6 +366,11 @@ namespace ShareCircle.Migrations
                 column: "ID_stroska");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Skupina_ApplicationUserId",
+                table: "Skupina",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Strosek_ID_placnika",
                 table: "Strosek",
                 column: "ID_placnika");
@@ -383,6 +379,11 @@ namespace ShareCircle.Migrations
                 name: "IX_Strosek_ID_skupine",
                 table: "Strosek",
                 column: "ID_skupine");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vracilo_ApplicationUserId",
+                table: "Vracilo",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vracilo_ID_dolznika",
@@ -398,11 +399,6 @@ namespace ShareCircle.Migrations
                 name: "IX_Vracilo_ID_upnika",
                 table: "Vracilo",
                 column: "ID_upnika");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vracilo_UporabnikID",
-                table: "Vracilo",
-                column: "UporabnikID");
         }
 
         /// <inheritdoc />
@@ -436,16 +432,13 @@ namespace ShareCircle.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Strosek");
 
             migrationBuilder.DropTable(
                 name: "Skupina");
 
             migrationBuilder.DropTable(
-                name: "Uporabnik");
+                name: "AspNetUsers");
         }
     }
 }

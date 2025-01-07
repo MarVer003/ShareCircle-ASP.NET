@@ -17,7 +17,7 @@
                     <a class="nav-link active" href="#">Nadzorna Plošča</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Dodaj Uporabnika</a>
+                    <a class="nav-link" asp-action="DodajUporabnika" asp-route-id="@Model.ID">Dodaj Uporabnika</a>
                 </li>
             </ul>
         </div>
@@ -89,8 +89,8 @@
                                 <div class="transaction-entry mb-3 p-3 border rounded bg-light">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <strong>@vracilo.Dolžnik.Ime @vracilo.Dolžnik.Priimek → @vracilo.Upnik.Ime
-                                                @vracilo.Upnik.Priimek</strong>
+                                            <strong>@vracilo.Dolžnik.UserName →
+                                                @vracilo.Upnik.UserName</strong>
                                             <br />
                                             <small class="text-muted">@vracilo.DatumVracila.ToString("d. M. yyyy")</small>
                                         </div>
@@ -117,7 +117,7 @@
                     <div class="balance-entry mb-3">
                         <div class="d-flex justify-content-between">
                             <div>
-                                @clan.Uporabnik.Ime @clan.Uporabnik.Priimek
+                                @clan.Uporabnik.UserName
                             </div>
                             <div class="@((clan.Stanje < 0) ? "text-danger" : "text-success")">
                                 @clan.Stanje.ToString("C")

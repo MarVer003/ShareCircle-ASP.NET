@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +13,27 @@ namespace ShareCircle.Controllers
     public class SkupinaController : Controller
     {
         private readonly ShareCircleDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SkupinaController(ShareCircleDbContext context)
+        public SkupinaController(ShareCircleDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Skupina
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Skupina.ToListAsync());
+            var claniSkupin = await _context.ClanSkupine
+                .Where(cs => cs.UporabnikID == _userManager.GetUserId(User))
+                .Select(cs => cs.SkupinaID)
+                .ToListAsync();
+
+            var skupine = await _context.Skupina
+                .Where(s => claniSkupin.Contains(s.ID))
+                .ToListAsync();
+
+            return View(skupine);
         }
 
         // GET: Skupina/Details/PodrobnostiStroska/{id_skupine}?strosekId={id_stroska}
@@ -80,7 +93,7 @@ namespace ShareCircle.Controllers
                 })
                 .ToList();
 
-            ViewData["Uporabniki"] = new SelectList(items, "Uporabnik.ID", "FullName");
+            ViewData["Uporabniki"] = new SelectList(items, "Uporabnik.Id", "Uporabnik.UserName");
 
             return View(new Strosek { ID_skupine = skupinaId });
         }
@@ -152,7 +165,7 @@ namespace ShareCircle.Controllers
                 })
                 .ToList();
 
-            ViewData["Uporabniki"] = new SelectList(items, "Uporabnik.ID", "FullName");
+            ViewData["Uporabniki"] = new SelectList(items, "Uporabnik.Id", "Uporabnik.UserName");
 
             return View(new Vracilo { ID_skupine = skupinaId });
         }
@@ -183,6 +196,49 @@ namespace ShareCircle.Controllers
             return View(vracilo); // Return view with validation errors
         }
 
+        public IActionResult DodajUporabnika(int id)
+        {
+            var existingUserIds = _context.ClanSkupine
+                .Where(cs => cs.SkupinaID == id)
+                .Select(cs => cs.UporabnikID)
+                .ToList();
+
+            var availableUsers = _context.Uporabnik
+                .Where(u => !existingUserIds.Contains(u.Id))
+                .ToList();
+
+            ViewBag.Uporabniki = new SelectList(availableUsers, "Id", "UserName");
+
+            return View(new ClanSkupine { SkupinaID = id });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DodajUporabnika([Bind("UporabnikID,SkupinaID,DatumPridruzitve")] ClanSkupine clanSkupine)
+        {
+            if (ModelState.IsValid)
+            {
+                clanSkupine.DatumPridruzitve = DateTime.Now;
+                _context.ClanSkupine.Add(clanSkupine);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", new { id = clanSkupine.SkupinaID });
+            }
+
+            var existingUserIds = _context.ClanSkupine
+                .Where(cs => cs.SkupinaID == clanSkupine.SkupinaID)
+                .Select(cs => cs.UporabnikID)
+                .ToList();
+
+            var availableUsers = _context.Uporabnik
+                .Where(u => !existingUserIds.Contains(u.Id))
+                .ToList();
+
+            ViewBag.Uporabniki = new SelectList(availableUsers, "Id", "UserName");
+            return View(clanSkupine);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> DeleteStrosek(int id, int skupinaId)
         {
@@ -190,18 +246,11 @@ namespace ShareCircle.Controllers
             {
                 // Retrieve the expense to delete
                 var strosek = await _context.Strosek
-                    .Include(s => s.RazdelitveStroskov)
                     .FirstOrDefaultAsync(s => s.ID == id);
 
                 if (strosek == null)
                 {
                     return NotFound();
-                }
-
-                // Tudi razdelitve je potrebno izbrisati
-                if (strosek.RazdelitveStroskov != null)
-                {
-                    _context.RazdelitevStroska.RemoveRange(strosek.RazdelitveStroskov);
                 }
 
                 // Izbriši strošek
@@ -246,7 +295,7 @@ namespace ShareCircle.Controllers
             }
         }
 
-        private async Task RecalculateBalancesAsync(int SkupinaId)
+        private async Task RecalculateBalancesAsync(int? SkupinaId)
         {
             var claniSkupine = await _context.ClanSkupine
                 .Where(cs => cs.SkupinaID == SkupinaId)
@@ -261,7 +310,7 @@ namespace ShareCircle.Controllers
                 .Where(s => s.ID_skupine == SkupinaId)
                 .ToArrayAsync();
 
-            Dictionary<int, decimal> claniZneski = [];
+            Dictionary<string, decimal> claniZneski = [];
             foreach (var clan in claniSkupine)
             {
                 claniZneski.Add(clan.UporabnikID, 0);
@@ -288,9 +337,6 @@ namespace ShareCircle.Controllers
             await _context.SaveChangesAsync();
         }
 
-
-
-
         // GET: Skupina/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -298,6 +344,8 @@ namespace ShareCircle.Controllers
             {
                 return NotFound();
             }
+
+            await RecalculateBalancesAsync(id);
 
             var skupina = await _context.Skupina
                 .Include(s => s.Stroski)
@@ -335,6 +383,8 @@ namespace ShareCircle.Controllers
             {
                 skupina.DatumNastanka = DateTime.Now;
                 _context.Add(skupina);
+                await _context.SaveChangesAsync();
+                _context.Add(new ClanSkupine { UporabnikID = _userManager.GetUserId(User), SkupinaID = skupina.ID });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

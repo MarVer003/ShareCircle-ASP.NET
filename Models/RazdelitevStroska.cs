@@ -13,7 +13,7 @@ public class RazdelitevStroska
     public int ID_stroska { get; set; }
 
     [ForeignKey(nameof(Dolznik))]
-    public int ID_dolznika { get; set; }
+    public string ID_dolznika { get; set; }
 
 
     [Required]
@@ -21,6 +21,8 @@ public class RazdelitevStroska
 
     // Navigacijske lastnosti
     public required Strosek Strosek { get; init; }
-    public required Uporabnik Dolznik { get; init; }
+
+    [DeleteBehavior(DeleteBehavior.Restrict)]
+    public required ApplicationUser Dolznik { get; init; }
 
 }

@@ -31,7 +31,7 @@
                         <div class="form-group mb-3">
                             <label asp-for="CelotniZnesek" class="form-label">Znesek</label>
                             <input asp-for="CelotniZnesek" type="number" class="form-control"
-                                placeholder="Vpišite znesek" required step="0.01" />
+                                placeholder="Vpišite znesek" required step="0.01" min="0.01" />
                             <span asp-validation-for="CelotniZnesek" class="text-danger"></span>
                         </div>
 

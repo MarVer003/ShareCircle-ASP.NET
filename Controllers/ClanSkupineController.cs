@@ -52,7 +52,7 @@ namespace ShareCircle.Controllers
         public IActionResult Create()
         {
             ViewData["SkupinaID"] = new SelectList(_context.Skupina, "ID", "ImeSkupine");
-            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "ID", "Ime");
+            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "Id", "UserName");
             return View();
         }
 
@@ -70,7 +70,7 @@ namespace ShareCircle.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["SkupinaID"] = new SelectList(_context.Skupina, "ID", "ImeSkupine", clanSkupine.SkupinaID);
-            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "ID", "Ime", clanSkupine.UporabnikID);
+            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "Id", "UserName", clanSkupine.UporabnikID);
             return View(clanSkupine);
         }
 
@@ -88,7 +88,7 @@ namespace ShareCircle.Controllers
                 return NotFound();
             }
             ViewData["SkupinaID"] = new SelectList(_context.Skupina, "ID", "ID", clanSkupine.SkupinaID);
-            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "ID", "ID", clanSkupine.UporabnikID);
+            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "Id", "UserName", clanSkupine.UporabnikID);
             return View(clanSkupine);
         }
 
@@ -125,7 +125,7 @@ namespace ShareCircle.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["SkupinaID"] = new SelectList(_context.Skupina, "ID", "ID", clanSkupine.SkupinaID);
-            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "ID", "ID", clanSkupine.UporabnikID);
+            ViewData["UporabnikID"] = new SelectList(_context.Uporabnik, "Id", "UserName", clanSkupine.UporabnikID);
             return View(clanSkupine);
         }
 

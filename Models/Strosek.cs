@@ -9,7 +9,7 @@ public class Strosek
     public int ID { get; set; }
 
     [ForeignKey(nameof(Placnik))]
-    public int ID_placnika { get; set; }
+    public string ID_placnika { get; set; }
 
     [ForeignKey(nameof(Skupina))]
     public int ID_skupine { get; set; }
@@ -23,7 +23,7 @@ public class Strosek
     public DateTime DatumPlacila { get; set; }
 
    // Navigacijske lastnosti
-    public Uporabnik? Placnik { get; init; }
+    public ApplicationUser? Placnik { get; init; }
     public Skupina? Skupina { get; init; }
     public ICollection<RazdelitevStroska>? RazdelitveStroskov { get; set; }
 }

@@ -167,12 +167,12 @@ namespace ShareCircle.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DatumPrijave")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -181,10 +181,7 @@ namespace ShareCircle.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Ime")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -209,6 +206,9 @@ namespace ShareCircle.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Priimek")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -250,8 +250,9 @@ namespace ShareCircle.Migrations
                     b.Property<decimal>("Stanje")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UporabnikID")
-                        .HasColumnType("int");
+                    b.Property<string>("UporabnikID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
 
@@ -270,8 +271,9 @@ namespace ShareCircle.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("ID_dolznika")
-                        .HasColumnType("int");
+                    b.Property<string>("ID_dolznika")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ID_stroska")
                         .HasColumnType("int");
@@ -296,13 +298,19 @@ namespace ShareCircle.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("DatumNastanka")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImeSkupine")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Skupina");
                 });
@@ -321,8 +329,9 @@ namespace ShareCircle.Migrations
                     b.Property<DateTime>("DatumPlacila")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ID_placnika")
-                        .HasColumnType("int");
+                    b.Property<string>("ID_placnika")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ID_skupine")
                         .HasColumnType("int");
@@ -342,28 +351,6 @@ namespace ShareCircle.Migrations
                     b.ToTable("Strosek");
                 });
 
-            modelBuilder.Entity("ShareCircle.Models.Uporabnik", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("DatumPrijave")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Ime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Priimek")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Uporabnik");
-                });
-
             modelBuilder.Entity("ShareCircle.Models.Vracilo", b =>
                 {
                     b.Property<int>("ID")
@@ -372,22 +359,24 @@ namespace ShareCircle.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("DatumVracila")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ID_dolznika")
-                        .HasColumnType("int");
+                    b.Property<string>("ID_dolznika")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ID_skupine")
                         .HasColumnType("int");
 
-                    b.Property<int>("ID_upnika")
-                        .HasColumnType("int");
+                    b.Property<string>("ID_upnika")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("StevilkaVracila")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UporabnikID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ZnesekVracila")
@@ -395,13 +384,13 @@ namespace ShareCircle.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("ID_dolznika");
 
                     b.HasIndex("ID_skupine");
 
                     b.HasIndex("ID_upnika");
-
-                    b.HasIndex("UporabnikID");
 
                     b.ToTable("Vracilo");
                 });
@@ -465,7 +454,7 @@ namespace ShareCircle.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShareCircle.Models.Uporabnik", "Uporabnik")
+                    b.HasOne("ShareCircle.Models.ApplicationUser", "Uporabnik")
                         .WithMany("ClanSkupine")
                         .HasForeignKey("UporabnikID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -478,7 +467,7 @@ namespace ShareCircle.Migrations
 
             modelBuilder.Entity("ShareCircle.Models.RazdelitevStroska", b =>
                 {
-                    b.HasOne("ShareCircle.Models.Uporabnik", "Dolznik")
+                    b.HasOne("ShareCircle.Models.ApplicationUser", "Dolznik")
                         .WithMany("RazdelitveStroskov")
                         .HasForeignKey("ID_dolznika")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -495,9 +484,16 @@ namespace ShareCircle.Migrations
                     b.Navigation("Strosek");
                 });
 
+            modelBuilder.Entity("ShareCircle.Models.Skupina", b =>
+                {
+                    b.HasOne("ShareCircle.Models.ApplicationUser", null)
+                        .WithMany("Skupine")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("ShareCircle.Models.Strosek", b =>
                 {
-                    b.HasOne("ShareCircle.Models.Uporabnik", "Placnik")
+                    b.HasOne("ShareCircle.Models.ApplicationUser", "Placnik")
                         .WithMany("Stroski")
                         .HasForeignKey("ID_placnika")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -516,7 +512,11 @@ namespace ShareCircle.Migrations
 
             modelBuilder.Entity("ShareCircle.Models.Vracilo", b =>
                 {
-                    b.HasOne("ShareCircle.Models.Uporabnik", "Dolžnik")
+                    b.HasOne("ShareCircle.Models.ApplicationUser", null)
+                        .WithMany("Vracila")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("ShareCircle.Models.ApplicationUser", "Dolžnik")
                         .WithMany()
                         .HasForeignKey("ID_dolznika")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -528,21 +528,30 @@ namespace ShareCircle.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShareCircle.Models.Uporabnik", "Upnik")
+                    b.HasOne("ShareCircle.Models.ApplicationUser", "Upnik")
                         .WithMany()
                         .HasForeignKey("ID_upnika")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("ShareCircle.Models.Uporabnik", null)
-                        .WithMany("Vracila")
-                        .HasForeignKey("UporabnikID");
 
                     b.Navigation("Dolžnik");
 
                     b.Navigation("Skupina");
 
                     b.Navigation("Upnik");
+                });
+
+            modelBuilder.Entity("ShareCircle.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("ClanSkupine");
+
+                    b.Navigation("RazdelitveStroskov");
+
+                    b.Navigation("Skupine");
+
+                    b.Navigation("Stroski");
+
+                    b.Navigation("Vracila");
                 });
 
             modelBuilder.Entity("ShareCircle.Models.Skupina", b =>
@@ -557,17 +566,6 @@ namespace ShareCircle.Migrations
             modelBuilder.Entity("ShareCircle.Models.Strosek", b =>
                 {
                     b.Navigation("RazdelitveStroskov");
-                });
-
-            modelBuilder.Entity("ShareCircle.Models.Uporabnik", b =>
-                {
-                    b.Navigation("ClanSkupine");
-
-                    b.Navigation("RazdelitveStroskov");
-
-                    b.Navigation("Stroski");
-
-                    b.Navigation("Vracila");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,7 +17,9 @@
             @foreach (var group in Model)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
+                    <!-- Kartica skupine -->
+                    <div class="card shadow-lg bg-white border" style="cursor: pointer;"
+                        onclick="window.location.href='@Url.Action("Details", new { id = group.ID })'">
                         <div class="card-body">
                             <h5 class="card-title">@group.ImeSkupine</h5>
                             <h6 class="card-subtitle mb-2 text-muted">
@@ -26,10 +28,12 @@
                             <p class="card-text">
                                 <small class="text-muted">ID: @group.ID</small>
                             </p>
+                            <!-- Gumbi znotraj kartice -->
                             <div class="d-flex justify-content-between">
-                                <a asp-action="Details" asp-route-id="@group.ID" class="btn btn-info btn-sm">Podrobnosti</a>
-                                <a asp-action="Edit" asp-route-id="@group.ID" class="btn btn-warning btn-sm">Uredi</a>
-                                <a asp-action="Delete" asp-route-id="@group.ID" class="btn btn-danger btn-sm">Izbriši</a>
+                                <a asp-action="Edit" asp-route-id="@group.ID" class="btn btn-warning btn-sm"
+                                    onclick="event.stopPropagation()">Uredi</a>
+                                <a asp-action="Delete" asp-route-id="@group.ID" class="btn btn-danger btn-sm"
+                                    onclick="event.stopPropagation()">Izbriši</a>
                             </div>
                         </div>
                     </div>
@@ -53,5 +57,19 @@
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .btn {
+        z-index: 1;
     }
 </style>
