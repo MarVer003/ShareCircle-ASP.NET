@@ -376,9 +376,6 @@ namespace ShareCircle.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StevilkaVracila")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("ZnesekVracila")
                         .HasColumnType("decimal(18,2)");
 

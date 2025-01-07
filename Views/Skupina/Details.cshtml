@@ -17,7 +17,8 @@
                     <a class="nav-link active" href="#">Nadzorna Plošča</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="DodajUporabnika" asp-route-id="@Model.ID">Dodaj Uporabnika</a>
+                    <a class="nav-link" asp-controller="ClanSkupine" asp-action="DodajUporabnika"
+                        asp-route-id="@Model.ID">Dodaj Uporabnika</a>
                 </li>
             </ul>
         </div>
@@ -27,10 +28,12 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>Transakcije</h3>
                 <div>
-                    <a asp-action="DodajStrosek" asp-route-skupinaId="@Model.ID" class="btn btn-primary me-2">Dodaj
+                    <a asp-action="DodajStrosek" asp-controller="Strosek" asp-route-skupinaId="@Model.ID"
+                        class="btn btn-primary me-2">Dodaj
                         Strošek</a>
 
-                    <a asp-action="DodajVracilo" asp-route-skupinaId="@Model.ID" class="btn btn-secondary">Dodaj
+                    <a asp-action="DodajVracilo" asp-controller="Vracilo" asp-route-skupinaId="@Model.ID"
+                        class="btn btn-secondary">Dodaj
                         Vračilo</a>
                 </div>
             </div>
@@ -59,8 +62,8 @@
                     {
                         @foreach (var strosek in Model.Stroski)
                         {
-                            <a asp-action="PodrobnostiStroska" asp-route-id="@Model.ID" asp-route-strosekId="@strosek.ID"
-                                class="text-decoration-none">
+                            <a asp-action="PodrobnostiStroska" asp-controller="Strosek" asp-route-id="@Model.ID"
+                                asp-route-strosekId="@strosek.ID" class="text-decoration-none">
                                 <div class="transaction-entry mb-3 p-3 border rounded bg-light" style="cursor: pointer;">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -84,8 +87,8 @@
                     {
                         @foreach (var vracilo in Model.Vracila)
                         {
-                            <a asp-action="PodrobnostiVracila" asp-route-id="@Model.ID" asp-route-vraciloId="@vracilo.ID"
-                                class="text-decoration-none">
+                            <a asp-action="PodrobnostiVracila" asp-controller="Vracilo" asp-route-id="@Model.ID"
+                                asp-route-vraciloId="@vracilo.ID" class="text-decoration-none">
                                 <div class="transaction-entry mb-3 p-3 border rounded bg-light">
                                     <div class="d-flex justify-content-between">
                                         <div>

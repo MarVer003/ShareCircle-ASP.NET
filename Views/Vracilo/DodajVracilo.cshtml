@@ -31,8 +31,8 @@
                         <!-- Znesek vračila -->
                         <div class="form-group mb-3">
                             <label asp-for="ZnesekVracila" class="form-label">Znesek Vračila</label>
-                            <input asp-for="ZnesekVracila" type="number" class="form-control"
-                                placeholder="Vpišite znesek vračila" required step="0.01" min="0.01" />
+                            <input asp-for="ZnesekVracila" type="number" class="form-control" placeholder="0.00"
+                                required step="0.01" min="0.01" value="" max="1000000000" />
                             <span asp-validation-for="ZnesekVracila" class="text-danger"></span>
                         </div>
 
@@ -42,7 +42,7 @@
                         <!-- Submit and Back Button -->
                         <div class="form-group text-center">
                             <input type="submit" value="Dodaj" class="btn btn-success" />
-                            <a asp-action="Details" asp-route-id="@Model.ID_skupine"
+                            <a asp-action="Details" asp-controller="Skupina" asp-route-id="@Model.ID_skupine"
                                 class="btn btn-secondary ms-2">Nazaj na seznam</a>
                         </div>
                     </form>

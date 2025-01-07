@@ -16,8 +16,6 @@ public class Vracilo
     [ForeignKey(nameof(Skupina))]
     public int ID_skupine { get; set; }
 
-    public int StevilkaVracila { get; set; }
-
     public decimal ZnesekVracila { get; set; }
 
     public DateTime DatumVracila { get; set; }

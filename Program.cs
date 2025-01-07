@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ShareCircle.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using ShareCircle.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("ShareCircleDbC
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IBalanceService, BalanceService>();
 
 // nadomesti stari .AddDbContext
 builder.Services.AddDbContext<ShareCircleDbContext>(options =>

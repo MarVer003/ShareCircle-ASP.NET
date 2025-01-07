@@ -164,6 +164,48 @@ namespace ShareCircle.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult DodajUporabnika(int id)
+        {
+            var existingUserIds = _context.ClanSkupine
+                .Where(cs => cs.SkupinaID == id)
+                .Select(cs => cs.UporabnikID)
+                .ToList();
+
+            var availableUsers = _context.Uporabnik
+                .Where(u => !existingUserIds.Contains(u.Id))
+                .ToList();
+
+            ViewBag.Uporabniki = new SelectList(availableUsers, "Id", "UserName");
+
+            return View(new ClanSkupine { SkupinaID = id });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DodajUporabnika([Bind("UporabnikID,SkupinaID,DatumPridruzitve")] ClanSkupine clanSkupine)
+        {
+            if (ModelState.IsValid)
+            {
+                clanSkupine.DatumPridruzitve = DateTime.Now;
+                _context.ClanSkupine.Add(clanSkupine);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Skupina", new { id = clanSkupine.SkupinaID });
+            }
+
+            var existingUserIds = _context.ClanSkupine
+                .Where(cs => cs.SkupinaID == clanSkupine.SkupinaID)
+                .Select(cs => cs.UporabnikID)
+                .ToList();
+
+            var availableUsers = _context.Uporabnik
+                .Where(u => !existingUserIds.Contains(u.Id))
+                .ToList();
+
+            ViewBag.Uporabniki = new SelectList(availableUsers, "Id", "UserName");
+            return View(clanSkupine);
+        }
+
         private bool ClanSkupineExists(int id)
         {
             return _context.ClanSkupine.Any(e => e.ID == id);

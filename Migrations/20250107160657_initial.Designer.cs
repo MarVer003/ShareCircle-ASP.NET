@@ -12,7 +12,7 @@ using ShareCircle.Data;
 namespace ShareCircle.Migrations
 {
     [DbContext(typeof(ShareCircleDbContext))]
-    [Migration("20250107105427_initial")]
+    [Migration("20250107160657_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -378,9 +378,6 @@ namespace ShareCircle.Migrations
                     b.Property<string>("ID_upnika")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("StevilkaVracila")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("ZnesekVracila")
                         .HasColumnType("decimal(18,2)");

@@ -246,7 +246,6 @@ namespace ShareCircle.Migrations
                     ID_dolznika = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ID_upnika = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ID_skupine = table.Column<int>(type: "int", nullable: false),
-                    StevilkaVracila = table.Column<int>(type: "int", nullable: false),
                     ZnesekVracila = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DatumVracila = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)

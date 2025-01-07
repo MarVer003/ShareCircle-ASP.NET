@@ -150,9 +150,9 @@ namespace ShareCircle.Data
             //dodajanje vracil
             var vracila = new Vracilo[]
             {
-                new() {ID_dolznika=Uporabniki[1].Id,ID_upnika=Uporabniki[0].Id,ID_skupine=skupine[0].ID,StevilkaVracila=1,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-01"),Dolžnik=Uporabniki[1],Upnik=Uporabniki[0],Skupina=skupine[0]},
-                new() {ID_dolznika=Uporabniki[2].Id,ID_upnika=Uporabniki[0].Id,ID_skupine=skupine[0].ID,StevilkaVracila=2,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-02"),Dolžnik=Uporabniki[2],Upnik=Uporabniki[0],Skupina=skupine[0]},
-                new() {ID_dolznika=Uporabniki[2].Id,ID_upnika=Uporabniki[0].Id,ID_skupine=skupine[0].ID,StevilkaVracila=3,ZnesekVracila=2,DatumVracila=DateTime.Parse("2024-09-03"),Dolžnik=Uporabniki[2],Upnik=Uporabniki[0],Skupina=skupine[0]}
+                new() {ID_dolznika=Uporabniki[1].Id,ID_upnika=Uporabniki[0].Id,ID_skupine=skupine[0].ID,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-01"),Dolžnik=Uporabniki[1],Upnik=Uporabniki[0],Skupina=skupine[0]},
+                new() {ID_dolznika=Uporabniki[2].Id,ID_upnika=Uporabniki[0].Id,ID_skupine=skupine[0].ID,ZnesekVracila=1,DatumVracila=DateTime.Parse("2024-09-02"),Dolžnik=Uporabniki[2],Upnik=Uporabniki[0],Skupina=skupine[0]},
+                new() {ID_dolznika=Uporabniki[2].Id,ID_upnika=Uporabniki[0].Id,ID_skupine=skupine[0].ID,ZnesekVracila=2,DatumVracila=DateTime.Parse("2024-09-03"),Dolžnik=Uporabniki[2],Upnik=Uporabniki[0],Skupina=skupine[0]}
             };
             foreach (Vracilo vr in vracila)
             {
