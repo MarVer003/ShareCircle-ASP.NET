@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareCircle.Data;
 using ShareCircle.Models;
+using ShareCircle.Filters;
 
 namespace ShareCircle.Controllers_Api
 {
     [Route("api/v1/Skupina")]
     [ApiController]
+    [ApiKeyAuth]
     public class SkupineApiController : ControllerBase
     {
         private readonly ShareCircleDbContext _context;
