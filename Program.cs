@@ -2,9 +2,12 @@ using ShareCircle.Data;
 using Microsoft.EntityFrameworkCore;
 using ShareCircle.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using ShareCircle.Services;
+using System.Globalization;
 
+// Set default culture to sl-SI
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sl-SI");
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("sl-SI");
 
 var builder = WebApplication.CreateBuilder(args);
 

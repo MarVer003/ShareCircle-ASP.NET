@@ -80,7 +80,7 @@ public class StrosekController : Controller
 
             var dolzniki = _context.ClanSkupine
             .Include(cs => cs.Uporabnik)
-            .Where(cs => cs.SkupinaID == strosek.ID_skupine && cs.UporabnikID != strosek.ID_placnika)
+            .Where(cs => cs.SkupinaID == strosek.ID_skupine)
             .Select(cs => new
             {
                 cs.UporabnikID,
