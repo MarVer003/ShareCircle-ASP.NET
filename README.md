@@ -96,5 +96,6 @@ ShareCircle je spletna aplikacija za upravljanje skupinskih finančnih stroškov
 ## Android aplikacija
 
   - Android aplikacija nam omogoča, da s pomočjo API-ja pregledujemo in dodajamo skupine.
+    
 ![Android pregled skupin](https://github.com/user-attachments/assets/6e8c7927-074e-4968-b3c8-1d30182cd60a)
 ![Android dodajanje skupine](https://github.com/user-attachments/assets/243758c8-d342-47a9-a4c9-0585b7923546)
